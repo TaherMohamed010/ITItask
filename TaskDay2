@@ -1,0 +1,93 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Day2Task
+{
+    struct Time
+    {
+        public int Hours;
+        public int Minutes;
+        public int Seconds;
+
+        public void Print()
+        {
+            Console.WriteLine($"{Hours:D2}H:{Minutes:D2}M:{Seconds:D2}S");
+        }
+    }
+    class Task2
+    {
+        static void Main(string[] args)
+        {
+            #region Q1
+            Console.Write("Enter the number of students: ");
+            int numOfStudents = int.Parse(Console.ReadLine());
+
+            string[] students = new string[numOfStudents]; 
+
+            
+            for (int i = 0; i < numOfStudents; i++)
+            {
+                Console.Write($"Enter name of student {i + 1}: ");
+                students[i] = Console.ReadLine();
+            }
+
+        
+            Console.WriteLine("\nList of Students:");
+            for (int i = 0; i < numOfStudents; i++)
+            {
+                Console.WriteLine($"Student {i + 1}: {students[i]}");
+            }
+            #endregion
+
+            #region Q2
+            Console.Write("Enter number of tracks: ");
+            int numTracks = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter number of students per track: ");
+            int numStudents = int.Parse(Console.ReadLine());
+
+            int[,] ages = new int[numTracks, numStudents]; 
+
+            
+            for (int t = 0; t < numTracks; t++)
+            {
+                Console.WriteLine($"\nEntering ages for Track {t + 1}:");
+                for (int s = 0; s < numStudents; s++)
+                {
+                    Console.Write($"Enter age of student {s + 1}: ");
+                    ages[t, s] = int.Parse(Console.ReadLine());
+                }
+            }
+
+           
+            Console.WriteLine("\n--- Student Ages by Track ---");
+            for (int t = 0; t < numTracks; t++)
+            {
+                int sum = 0;
+                Console.Write($"Track {t + 1} ages: ");
+                for (int s = 0; s < numStudents; s++)
+                {
+                    Console.Write(ages[t, s] + " ");
+                    sum += ages[t, s];
+                }
+                double avg = (double)sum / numStudents;
+                Console.WriteLine($"\nAverage age for Track {t + 1}: {avg:F2}\n");
+            }
+            #endregion
+
+            #region Q3
+            Time t1;
+            t1.Hours = 22;
+            t1.Minutes = 33;
+            t1.Seconds = 11;
+
+            
+            Console.Write("Time is: ");
+            t1.Print();
+            #endregion
+        }
+    }
+}
