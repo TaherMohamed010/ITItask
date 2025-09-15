@@ -1,0 +1,670 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Day4Task
+{
+    #region REQ_1
+    public class Company
+    {
+        public string Name { get; set; }
+        public List<Department> Departments { get; set; } = new List<Department>();
+
+        public Company(string Name)
+        {
+           this.Name = Name;
+        }
+    }
+
+    public class Department
+    {
+        public string Name { get; set; }
+        public List<Employee> Employees { get; set; } = new List<Employee>();
+
+        public Department(string name)
+        {
+            Name = name;
+        }
+    }
+
+    public class Employee
+    {
+        public string Name { get; set; }
+        public List<Course> Courses { get; set; } = new List<Course>();
+
+        public Employee(string Name)
+        {
+            this.Name = Name;
+        }
+    }
+
+    public class Course
+    {
+        public string CName { get; set; }
+
+        public Course(string Name)
+        {
+            CName = Name;
+        }
+    }
+
+    public class Car
+    {
+        public string Model { get; set; }
+        public Engine Engine { get; set; }   
+
+        public Car(string Model, int horsepower)
+        {
+            this.Model = Model;
+            Engine = new Engine(horsepower); 
+        }
+    }
+
+    public class Engine
+    {
+        public int HorsePower { get; set; }
+
+        public Engine(int hp)
+        {
+            HorsePower = hp;
+        }
+    }
+    #endregion
+    #region REQ_2
+    public class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+
+        public Person(string name, int age)
+        {
+            Name = name;
+            Age = age;
+        }
+
+        public virtual void Introduce()
+        {
+            Console.WriteLine($"Hi, I'm {Name}, {Age} years old.");
+        }
+    }
+
+    public class Instructor : Person
+    {
+        public Instructor(string name, int age) : base(name, age) { }
+
+        public void TeachCourse(Course_2 course)
+        {
+            course.Instructor = this;
+            Console.WriteLine($"{Name} is now teaching {course.Title}.");
+        }
+
+        
+        public override void Introduce()
+        {
+            Console.WriteLine($"Hi, I'm {Name}, {Age} years old, and I'm a teacher.");
+        }
+    }
+    public class Student : Person
+    {
+        public List<Course_2> RegisteredCourses { get; set; } = new List<Course_2>();
+
+        public Student(string name, int age) : base(name, age) { }
+
+        public void RegisterCourse(Course_2 course)
+        {
+            RegisteredCourses.Add(course);
+            Console.WriteLine($"{Name} has registered for {course.Title}.");
+        }
+
+        public override void Introduce()
+        {
+            Console.WriteLine($"Hi, I'm {Name}, {Age} years old, and I'm a learner.");
+        }
+    }
+    public class Course_2
+    {
+        public string Title { get; set; }
+        public Instructor Instructor { get; set; }
+
+        public Course_2(string title)
+        {
+            Title = title;
+        }
+    }
+    #endregion
+    #region REQ_3
+    public abstract class Shape
+    {
+        public abstract double Area();  
+    }
+    
+    public interface IDrawable
+    {
+        void Draw();  
+    }
+
+    public class Circle : Shape, IDrawable
+    {
+        public double Radius { get; set; }
+
+        public Circle(double radius)
+        {
+            Radius = radius;
+        }
+
+        public override double Area()
+        {
+            return Math.PI * Radius * Radius;
+        }
+
+        public void Draw()
+        {
+            Console.WriteLine("Drawing a Circle:");
+            Console.WriteLine("   ****   ");
+            Console.WriteLine(" *      * ");
+            Console.WriteLine(" *      * ");
+            Console.WriteLine("   ****   ");
+        }
+    }
+
+    public class Rectangle : Shape, IDrawable
+    {
+        public double Width { get; set; }
+        public double Height { get; set; }
+
+        public Rectangle(double width, double height)
+        {
+            Width = width;
+            Height = height;
+        }
+
+        public override double Area()
+        {
+            return Width * Height;
+        }
+
+        public void Draw()
+        {
+            Console.WriteLine("Drawing a Rectangle:");
+            for (int i = 0; i < (int)Height; i++)
+            {
+                for (int j = 0; j < (int)Width; j++)
+                {
+                    Console.Write("*");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+    #endregion
+    #region REQ_4
+    public static class IdGenerator
+    {
+        private static int currentId = 0;
+
+        public static int GenerateId()
+        {
+            return ++currentId;  
+        }
+    }
+
+    public abstract class Person_2
+    {
+        public int Id { get; private set; }
+        public string Name { get; set; }
+
+        protected Person_2(string name)
+        {
+            Id = IdGenerator.GenerateId();
+            Name = name;
+        }
+    }
+
+    public class Instructor_2 : Person_2
+    {
+        public Instructor_2(string name) : base(name) { }
+    }
+
+    public class Student_2 : Person_2
+    {
+        public List<Grade> Grades { get; set; } = new List<Grade>();
+
+        public Student_2(string name) : base(name) { }
+    }
+
+    public class Grade
+    {
+        public int Value { get; set; }
+
+        public Grade(int value)
+        {
+            Value = value;
+        }
+
+        public static Grade operator +(Grade g1, Grade g2)
+        {
+            return new Grade(g1.Value + g2.Value);
+        }
+
+        public static Grade operator ==(Grade g1, Grade g2)
+        {
+            if (g1 == g2) return true;
+            else return false;
+        }
+
+        public static bool operator !=(Grade g1, Grade g2)
+        {
+            if (g1 != g2) return true;
+            else return false;
+        }
+   
+    }
+    #endregion
+    #region REQ_5
+    public enum CourseLevel
+    {
+        Beginner,
+        Intermediate,
+        Advanced
+    }
+
+    public class Course_3
+    {
+        public string Title { get; set; }
+        public CourseLevel Level { get; set; }
+
+        public Course_3(string title, CourseLevel level)
+        {
+            Title = title;
+            Level = level;
+        }
+    }
+
+    public class Student_3
+    {
+        public string Name { get; set; }
+        public List<Course_3> Courses { get; set; } = new List<Course_3>();
+
+        public Student_3(string name)
+        {
+            Name = name;
+        }
+
+        public void RegisterCourse(Course_3 course)
+        {
+            Courses.Add(course);
+
+            Console.WriteLine($"{Name} has registered for {course.Title} ({course.Level}).");
+
+            switch (course.Level)
+            {
+                case CourseLevel.Beginner:
+                    Console.WriteLine("Good luck starting out!");
+                    break;
+                case CourseLevel.Intermediate:
+                    Console.WriteLine("Keep building your knowledge!");
+                    break;
+                case CourseLevel.Advanced:
+                    Console.WriteLine("This will be challenging!");
+                    break;
+            }
+        }
+    }
+    #endregion
+    #region (Bring Everything Together)
+    public static class IdGenerator_0
+    {
+        private static int currentId = 0;
+        public static int GenerateId() => ++currentId;
+    }
+
+    public abstract class Person_0
+    {
+        public int Id { get; private set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
+
+        protected Person_0(string name, int age)
+        {
+            Id = IdGenerator_0.GenerateId();
+            Name = name;
+            Age = age;
+        }
+
+        public virtual void Introduce()
+        {
+            Console.WriteLine($"Hi, I'm {Name}, {Age} years old.");
+        }
+    }
+
+    public class Student_0 : Person_0
+    {
+        public List<Course_0> Courses { get; set; } = new List<Course_0>();
+        public List<Grade_0> Grades { get; set; } = new List<Grade_0>();
+
+        public Student_0(string name, int age) : base(name, age) { }
+
+        public void RegisterCourse(Course_0 course)
+        {
+            Courses.Add(course);
+            Console.WriteLine($"{Name} has registered for {course.Title} ({course.Level}).");
+
+            switch (course.Level)
+            {
+                case CourseLevel.Beginner:
+                    Console.WriteLine("Good luck starting out!");
+                    break;
+                case CourseLevel.Intermediate:
+                    Console.WriteLine("Keep building your knowledge!");
+                    break;
+                case CourseLevel.Advanced:
+                    Console.WriteLine("This will be challenging!");
+                    break;
+            }
+        }
+
+        public Grade_0 GetTotalGrade()
+        {
+            if (Grades.Count == 0) return new Grade_0(0);
+            Grade_0 total = new Grade_0(0);
+            foreach (var g in Grades)
+                total += g;
+            return total;
+        }
+
+        public override void Introduce()
+        {
+            Console.WriteLine($"Hi, I'm {Name}, {Age} years old, and I'm a learner.");
+        }
+    }
+
+    public class Instructor_0 : Person_0
+    {
+        public List<Course_0> CoursesTaught { get; set; } = new List<Course_0>();
+
+        public Instructor_0(string name, int age) : base(name, age) { }
+
+        public void TeachCourse(Course_0 course)
+        {
+            course.Instructor = this;
+            CoursesTaught.Add(course);
+            Console.WriteLine($"{Name} is now teaching {course.Title}.");
+        }
+
+        public override void Introduce()
+        {
+            Console.WriteLine($"Hi, I'm {Name}, {Age} years old, and I teach courses.");
+        }
+    }
+
+    public enum CourseLevel_0 { Beginner, Intermediate, Advanced }
+
+    public class Course_0
+    {
+        public string Title { get; set; }
+        public CourseLevel Level { get; set; }
+        public Instructor_0 Instructor { get; set; }
+
+        public Course_0(string title, CourseLevel level)
+        {
+            Title = title;
+            Level = level;
+        }
+    }
+
+    public class Grade_0
+    {
+        public int Value { get; set; }
+        public Grade_0(int value) { Value = value; }
+
+        public static Grade_0 operator +(Grade_0 g1, Grade_0 g2) =>
+            new Grade_0(g1.Value + g2.Value);
+
+        public static Grade_0 operator ==(Grade_0 g1, Grade_0 g2)
+        {
+            if (g1==g2) return true;
+            else return false;
+        }
+
+        public static Grade_0 operator !=(Grade_0 g1, Grade_0 g2)
+        {
+            if (g1 != g2) return true;
+            else return false;
+        };
+
+  
+    }
+
+    public class Department_0
+    {
+        public string Name { get; set; }
+        public List<Person_0> Employees { get; set; } = new List<Person_0>();
+
+        public Department_0(string name) { Name = name; }
+    }
+
+    public class Company_0
+    {
+        public string Name { get; set; }
+        public List<Department_0> Departments { get; set; } = new List<Department_0>();
+
+        public Company_0(string name) { Name = name; }
+    }
+    #endregion
+    static void Main(string[] args)
+    {
+        #region MAIN_OF_REQ_1
+        Course sql = new Course("SQL");
+            Course csharp = new Course("C#");
+            Course os = new Course("OS");
+
+            Employee emp1 = new Employee("Taher");
+            emp1.Courses.Add(csharp);
+            emp1.Courses.Add(sql);
+
+            Employee emp2 = new Employee("Maryam");
+            emp2.Courses.Add(os);
+
+            Employee emp3 = new Employee("Ahmed");
+            emp3.Courses.Add(csharp);
+            emp3.Courses.Add(os);
+
+            Department sales = new Department("SALES");
+            sales.Employees.Add(emp1);
+
+            Department it = new Department("IT");
+            it.Employees.Add(emp2);
+            it.Employees.Add(emp3);
+
+            Company company = new Company("TaherTech");
+            company.Departments.Add(sales);
+            company.Departments.Add(it);
+
+            foreach (var dept in company.Departments)
+            {
+                foreach (var emp in dept.Employees)
+                {
+                    Console.Write($"{emp.Name} ({dept.Name}) - Courses: ");
+                    foreach (var course in emp.Courses)
+                    {
+                        Console.Write(course.Title + " ");
+                    }
+                    Console.WriteLine();
+                }
+            }
+        #endregion
+
+        #region MAIN_OF_REQ_2
+        Instructor instructor = new Instructor("Dr. Maryam", 27);
+        Student student1 = new Student("Taher", 21);
+        Student student2 = new Student("Ahmed", 20);
+
+        Course course = new Course("C#");
+
+        instructor.Introduce();
+        student1.Introduce();
+        student2.Introduce();
+
+        instructor.TeachCourse(course);
+
+        student1.RegisterCourse(course);
+        student2.RegisterCourse(course);
+
+        Console.WriteLine($"\nCourse: {course.Title}, Taught by: {course.Instructor.Name}");
+        Console.WriteLine("Students enrolled:");
+        foreach (var s in new[] { student1, student2 })
+        {
+            foreach (var c in s.RegisteredCourses)
+            {
+                Console.WriteLine($"{s.Name} → {c.Title}");
+            }
+        }
+        #endregion
+
+        #region MAIN_OF_REQ_3
+        List<Shape> shapes = new List<Shape>
+        {
+            new Circle(3),
+            new Rectangle(4, 2)
+        };
+
+        foreach (Shape shape in shapes)
+        {
+            Console.WriteLine($"Area: {shape.Area():F2}");
+
+            if (shape is IDrawable drawable)
+            {
+                drawable.Draw();
+            }
+
+            Console.WriteLine();
+        }
+        #endregion
+        #region MAIN_OF_REQ_4
+        Student s1 = new Student("Taher");
+        Student s2 = new Student("Ahmed");
+        Instructor i1 = new Instructor("Dr. Maryam");
+
+        Console.WriteLine($"Student: {s1.Name}, ID: {s1.Id}");
+        Console.WriteLine($"Student: {s2.Name}, ID: {s2.Id}");
+        Console.WriteLine($"Instructor: {i1.Name}, ID: {i1.Id}");
+
+        Grade g1 = new Grade(85);
+        Grade g2 = new Grade(90);
+        Grade g3 = new Grade(85);
+
+        s1.Grades.Add(g1);
+        s1.Grades.Add(g2);
+
+        Grade total = s1.Grades[0] + s1.Grades[1];
+        Console.WriteLine($"{s1.Name}'s total grade = {total}");
+
+        Console.WriteLine(g1 == g2);
+        Console.WriteLine(g1 == g3);
+        Console.WriteLine(g2 == g3);
+
+        Console.WriteLine(g1 != g2);
+        Console.WriteLine(g1 != g3);
+        Console.WriteLine(g2 != g3);
+        #endregion
+        #region MAIN_OF_REQ_5
+        Course c1 = new Course("C#", CourseLevel.Beginner);
+        Course c2 = new Course("Data Structures", CourseLevel.Intermediate);
+        Course c3 = new Course("AI", CourseLevel.Advanced);
+
+        Student s1 = new Student("Taher");
+
+        s1.RegisterCourse(c1);
+        Console.WriteLine();
+
+        s1.RegisterCourse(c2);
+        Console.WriteLine();
+
+        s1.RegisterCourse(c3);
+        #endregion
+
+        #region MAIN_OF_(Bring Everything Together)
+        Company_0 company = new Company_0("TaherTech");
+        Department_0 it = new Department_0("IT");
+        Department_0 hr = new Department_0("HR");
+
+        company.Departments.Add(it);
+        company.Departments.Add(hr);
+
+        // Create instructors
+        Instructor_0 inst1 = new Instructor_0("Dr. Maryam", 27);
+        Instructor_0 inst2 = new Instructor_0("Prof. Tasneem", 30);
+
+        it.Employees.Add(inst1);
+        hr.Employees.Add(inst2);
+
+        // Create students
+        Student_0 s1 = new Student_0("Taher", 21);
+        Student_0 s2 = new Student_0("Ahmed", 20);
+        Student_0 s3 = new Student_0("Sameh", 20);
+
+        it.Employees.Add(s1);
+        it.Employees.Add(s2);
+        hr.Employees.Add(s3);
+
+        Course_0 csharp = new Course_0("C# Basics", CourseLevel.Beginner);
+        Course_0 sql = new Course_0("SQL Fundamentals", CourseLevel.Intermediate);
+        Course_0 ai = new Course_0("AI Concepts", CourseLevel.Advanced);
+
+        inst1.TeachCourse(csharp);
+        inst1.TeachCourse(sql);
+        inst2.TeachCourse(ai);
+
+        s1.RegisterCourse(csharp);
+        s1.RegisterCourse(sql);
+        s1.Grades.Add(new Grade_0(85));
+        s1.Grades.Add(new Grade_0(90));
+
+        s2.RegisterCourse(ai);
+        s2.Grades.Add(new Grade_0(75));
+
+        s3.RegisterCourse(csharp);
+        s3.RegisterCourse(ai);
+        s3.Grades.Add(new Grade_0(80));
+        s3.Grades.Add(new Grade_0(70));
+
+        Console.WriteLine("\n======= REPORT =======");
+
+        Console.WriteLine("\n-- Students --");
+        foreach (var dept in company.Departments)
+        {
+            foreach (var emp in dept.Employees.OfType<Student_0>())
+            {
+                Console.Write($"{emp.Name} → Courses: ");
+                foreach (var c in emp.Courses)
+                {
+                    Console.Write($"{c.Title} ({c.Level})  ");
+                }
+                Console.WriteLine($" | Total Grade: {emp.GetTotalGrade()}");
+            }
+        }
+
+        Console.WriteLine("\n-- Instructors --");
+        foreach (var dept in company.Departments)
+        {
+            foreach (var inst in dept.Employees.OfType<Instructor_0>())
+            {
+                Console.Write($"{inst.Name} → Teaching: ");
+                foreach (var c in inst.CoursesTaught)
+                {
+                    Console.Write($"{c.Title} ({c.Level})  ");
+                }
+                Console.WriteLine();
+            }
+        }
+
+        Console.WriteLine("\n-- Departments --");
+        foreach (var dept in company.Departments)
+        {
+            Console.WriteLine($"{dept.Name} Department → Employees: {dept.Employees.Count}");
+        }
+        #endregion
+    }
+}
