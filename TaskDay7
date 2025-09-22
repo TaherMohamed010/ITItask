@@ -1,0 +1,61 @@
+using System;
+
+class Product
+{
+    public string name { get; set; };
+    public double price { get; set; };
+}
+
+public static class StringExtensions
+{
+    public static int WordCount(this string str)
+    }
+        var words = str.Split(" ",StringSplitOptions.RemoveEmptyEntries);
+        return words.Count();
+    }
+}
+
+public static class IntExtensions
+{
+    public static bool IsEven(this int num)
+    {
+        return num % 2 == 0;
+    }
+}
+
+public static class DateTimeExtensions
+{
+    public static int GetAge(this DateTime birthDate)
+    {
+        DateTime today = DateTime.Now;
+        int age = today.Year - birthDate.Year;
+        if (today.Month < birthDate.Month || (today.Month == birthDate.Month && today.Day < birthDate.Day))
+        {
+            age--;
+        }
+        return age;
+    }
+}
+
+public static class ReverseStringExtension
+{
+    public static string ReverseText(this string str)
+    {
+        char[] charArray = str.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
+    }
+}
+class Program
+{
+    static object createProduct()
+    {
+        return new Product { name = "v_cola", price = 15.0 };
+    }
+
+    static void Main(string[] args)
+    {
+        var product = createProduct();
+        Console.WriteLine(product);
+    }
+}
